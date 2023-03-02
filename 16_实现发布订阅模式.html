@@ -14,6 +14,8 @@
       constructor() {
         this.message = {} // 消息队列
       }
+
+      // 添加事件
       on(type, callpack) {
         // 先判断有没有这个属性（事件类型）
         if (!this.message[type]) {
@@ -24,23 +26,26 @@
         this.message[type].push(callpack)
       }
 
-      emit(type) {
+      // 事件触发
+      emit(type, ...params) {
         // 判断是否有订阅
         if (!this.message[type]) return
         // 如果有订阅，就对这个type事件做一个轮询
         this.message[type].forEach(item => {
           // 依次执行每一个消息的回调函数callback
-          item()
+          item(...params)
         })
       }
+
+      // 事件移除
       off(type, callback) {
         // 判断受否订阅，即消息队列里是否有type这个类型的事件，没有的话直接return
         if (!this.message[type]) return
         // 判断是否有callpack参数
         if (!callback) {
           // 如果没有callpack，就删除整个事件
-          this.message[type] = undefined
-          // delete this.message[type]
+          // this.message[type] = undefined
+          delete this.message[type]
         } else {
           // 如果有callpack，就仅仅删掉callpack这个消息（过滤掉这个消息方法）
           this.message[type] = this.message[type].filter(item => item !== callback)
@@ -49,7 +54,7 @@
       }
     }
 
-    function handlerA() {
+    function handlerA(args) {
       console.log('handlerA');
     }
     function handlerB() {
@@ -61,7 +66,7 @@
     person.on('buy', handlerA)
     person.on('buy', handlerB)
     console.log(person);
-    person.emit('buy')
+    person.emit('buy', 1, 2, 3)
 
     person.off('buy')
   </script>
