@@ -10,6 +10,58 @@
 
 <body>
   <script>
+    // 被观察者
+    class Subject {
+      constructor() {
+        // 观察者队列
+        this.obsevers = []
+      }
+      // 添加观察者
+      addObserver(obs) {
+        this.obsevers.push(obs)
+      }
+
+      // 删除观察者
+      removeObserver(obs) {
+        let index = this.obsevers.indexOf(obs)
+        if (index > -1) {
+          this.obsevers.splice(index, 1)
+        }
+      }
+
+      // 通知观察者
+      notifyObserver() {
+        this.obsevers.forEach(item => {
+          item.update()
+        })
+      }
+
+    }
+
+    // 观察者
+    class Observer {
+      constructor(name) {
+        this.name = name
+      }
+      update() {
+        console.log('Observer is updated');
+      }
+    }
+
+    // 测试代码
+    const subject = new Subject();
+    const observer1 = new Observer('观察者1');
+    const observer2 = new Observer('观察者2');
+
+    subject.addObserver(observer1);
+    subject.addObserver(observer2);
+    console.log(subject);
+
+    subject.removeObserver(observer1)
+    console.log(subject);
+
+    subject.notifyObserver()
+
 
   </script>
 </body>
