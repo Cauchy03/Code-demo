@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    class Observer {
+      constructor() {
+        this.message = {} // 消息队列
+      }
+      on(type, callpack) {
+        // 先判断有没有这个属性（事件类型）
+        if (!this.message[type]) {
+          // 如果没有这个属性，就初始化一个空的数组
+          this.message[type] = []
+        }
+        // 如果有这个属性，就往他的后面push一个新的 callback
+        this.message[type].push(callpack)
+      }
+
+      emit(type) {
+        // 判断是否有订阅
+        if (!this.message[type]) return
+        // 如果有订阅，就对这个type事件做一个轮询
+        this.message[type].forEach(item => {
+          // 依次执行每一个消息的回调函数callback
+          item()
+        })
+      }
+      off(type, callback) {
+        // 判断受否订阅，即消息队列里是否有type这个类型的事件，没有的话直接return
+        if (!this.message[type]) return
+        // 判断是否有callpack参数
+        if (!callback) {
+          // 如果没有callpack，就删除整个事件
+          this.message[type] = undefined
+          // delete this.message[type]
+        } else {
+          // 如果有callpack，就仅仅删掉callpack这个消息（过滤掉这个消息方法）
+          this.message[type] = this.message[type].filter(item => item !== callback)
+        }
+
+      }
+    }
+
+    function handlerA() {
+      console.log('handlerA');
+    }
+    function handlerB() {
+      console.log('handlerB');
+    }
+
+
+    const person = new Observer()
+    person.on('buy', handlerA)
+    person.on('buy', handlerB)
+    console.log(person);
+    person.emit('buy')
+
+    person.off('buy')
+  </script>
+</body>
+
+</html>

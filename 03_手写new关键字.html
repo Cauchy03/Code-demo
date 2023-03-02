@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // new操作符
+    function myNew(Func, ...args) {
+      // 创建一个对象
+      let newObj = {}
+      // 将创建的对象和构造函数通过原型链连接起来
+      newObj = Object.create(Func.prototype)
+      // 将构造函数this指向实例对象
+      let result = Func.apply(newObj, args)
+      // 检测result的返回值，如果return没有返回值就返回这个新建的对象
+      return result instanceof Object ? result : newObj
+    }
+
+  </script>
+</body>
+
+</html>

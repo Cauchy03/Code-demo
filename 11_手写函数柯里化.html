@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function curry(fn, ...args) {
+      // 获取函数fn的参数长度
+      let length = fn.length
+      let subArgs = args || []
+      return function () {
+        // 这里的arguments是返回函数传入的参数
+        // 拼接参数
+        for (let i = 0; i < arguments.length; i++) {
+          subArgs.push(arguments[i])
+        }
+        // 判断参数的长度是否满足函数所需参数长度
+        if (subArgs.length >= length) {
+          // 如果满足，执行函数,返回执行的结果
+          return fn.apply(this, subArgs)
+        } else {
+          // this window
+          // 如果不满足，递归返回柯里化函数，等待参数的传入
+          return curry.call(this, fn, subArgs)
+        }
+      }
+    }
+
+
+    function add(a, b, c) {
+      return a + b + c
+    }
+
+    let x = curry(add, 1, 2, 3)
+    let y = x()
+    console.log(y);
+  </script>
+</body>
+
+</html>

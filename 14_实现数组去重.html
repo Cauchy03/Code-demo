@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    let arr = [1, 2, 3, 4, 5, 6, 6, 5, 4, 2, 8, 4]
+    // Set实现
+    // console.log(Array.from(new Set(arr)));
+
+
+    // 使用map存储不重复的数字
+    function uniqueArray(arr) {
+      let map = new Map()
+      let newArr = []
+      arr.forEach(item => {
+        // has()用于判断map是否包为item的属性值
+        if (!map.has(item)) {
+          // 使用set()将item设置到map中，并设置其属性值为true
+          map.set(item, true)
+          newArr.push(item)
+        }
+      })
+      return newArr
+    }
+
+    // 使用indexOf()
+    // function uniqueArray(arr) {
+    //   let newArr = []
+    //   arr.forEach(item => {
+    //     if (newArr.indexOf(item) === -1) {
+    //       newArr.push(item)
+    //     }
+    //   })
+    //   return newArr
+    // }
+
+    // 使用includes()
+    // function uniqueArray(arr) {
+    //   let newArr = []
+    //   arr.forEach(item => {
+    //     if (!newArr.includes(item)) {
+    //       newArr.push(item)
+    //     }
+    //   })
+    //   return newArr
+    // }
+
+    console.log(uniqueArray(arr));
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <a href=""></a>
+  <img src="" alt="">
+  <script>
+    // 手写深拷贝
+    function deepClone(obj) {
+      if (!obj || typeof obj !== "object") return obj
+      let newObj = obj instanceof Array ? [] : {}
+      for (const key in obj) {
+        if (Object.hasOwnProperty.call(obj, key)) {
+          newObj[key] = deepClone(obj[key])
+        }
+      }
+      return newObj
+    }
+
+    let a = {
+      name: 'xiaoming',
+      age: 20,
+      hobby: ['唱', '跳', 'rap', '篮球'],
+      parent: {
+        mom: 'mama',
+        dad: 'baba'
+      }
+    }
+    let b = { ...a }
+    // let b = Object.assign({}, a)
+    // let b = deepClone(a)
+
+    a.name = 'hhhh'
+    a.age = 30
+    a.hobby[0] = '开车'
+    a.parent.mom = 'ma'
+    console.log(a);
+    console.log(b);
+    console.log(a === b);
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <input type="text">
+  <br>
+  <button>节流测试</button>
+  <script>
+    let ipt = document.querySelector('input')
+    let btn = document.querySelector('button')
+
+
+    ipt.addEventListener('input', myDebounce(function (e) {
+      console.log(e.target.value);
+    }, 1000))
+    btn.addEventListener('click', myThrottle(function () {
+      console.log('节流测试');
+    }, 2000))
+
+
+
+    // 防抖
+    function myDebounce(fn, delay) {
+      let timer = null
+      return function () {
+        // 保存this指向和传入参数
+        let context = this
+        let args = arguments
+        if (timer) {
+          // 如果此时存在定时器的话，则取消之前的定时器重新记时
+          clearTimeout(timer)
+          timer = null
+        }
+        // 设置定时器，使事件间隔指定事件后执行
+        timer = setTimeout(() => {
+          fn.apply(context, args)
+        }, delay)
+      }
+    }
+
+
+    // 节流
+    function myThrottle(fn, delay) {
+      // 改变量用于记录上一次函数的执行事件
+      let lastTime = 0
+      return function () {
+        // 保存this指向和传入参数
+        let context = this
+        let args = arguments
+        // 获取当前时间
+        let nowTime = Date.now()
+        // 剩余时间大于时间间隔，才能执行函数
+        if (nowTime - lastTime >= delay) {
+          fn.apply(context, args);
+          // 将上一次函数执行的时间设置为nowTime，这样下一次才能重新进入cd
+          lastTime = nowTime
+        }
+      }
+    }
+
+
+    // let debounce = myDebounce(function () {
+    //   console.log('这是防抖函数,2s后执行');
+    // }, 2000)
+    // debounce(1, 2, 3)
+    // let throttle = myThrottle(function () {
+    //   console.log('这是节流函数,2s只能执行一次');
+    // }, 3000)
+    // throttle()
+  </script>
+</body>
+
+</html>
