@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- Promise雏形 -->
+  <script>
+    // Promise 雏形
+    function Promise(executor) {
+      this.promiseState = 'pending'
+      this.promiseResult = null
+
+      // 设置一个回调函数 异步的时候执行
+      // ....
+
+      // 保存this指向，此时的this指向实例对象
+      const self = this
+      function resolve(data) {
+        // 判断状态
+        if (self.promiseState !== 'pending') return
+        // 修改对象状态
+        self.promiseState = 'fulfilled'
+        self.promiseResult = data
+      }
+      function reject(data) {
+        // 判断状态
+        if (self.promiseState !== 'rejected') return
+        // 修改对象状态
+        self.promiseState = 'rejected'
+        self.promiseResult = data
+      }
+      executor(resolve, reject)
+    }
+
+  </script>
+
+  <!-- all -->
+  <script>
+    // Promise.all()
+    function myPromiseAll(array) {
+      // 返回一个Promise 直接async包裹
+      return new Promise((resolve, reject) => {
+        let result = []
+        array.forEach((item, index) => {
+          // 属于Promise
+          if (item instanceof Promise) {
+            item.then(res => {
+              result[index] = res
+              // 别用push，异步时顺序可能会打乱
+              // result.push(res)
+              if (result.length === array.length) resolve(result)
+            }, err => {
+              reject(err)
+            })
+          } else {
+            result[index] = item
+            if (result.length === array.length) resolve(result)
+          }
+        })
+      })
+    }
+
+
+    // let p1 = new Promise((resolve, reject) => { resolve('p1') })
+    // let p2 = Promise.resolve('p2')
+    // let p3 = Promise.resolve('p3')
+    // let p4 = 4
+    // let p5 = 5
+    // let p6 = 6
+    // let arr = [p1, p5, p3]
+    // myPromiseAll(arr).then(res => { console.log(res); })
+  </script>
+
+
+  <!-- race -->
+  <script>
+    // Promise.race()
+    function myPromiseRace(array) {
+      return new Promise((resolve, reject) => {
+        array.forEach(item => {
+          if (item instanceof Promise) {
+            item.then(res => {
+              resolve(res)
+            }, err => {
+              reject(err)
+            })
+          } else resolve(item)
+        })
+      })
+    }
+
+    // 测试
+    let pp1 = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(88);
+      }, 3000);
+    });
+    let pp2 = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        reject(99);
+      }, 2000);
+    });
+    let x = [pp1, pp2]
+    myPromiseRace(x).then(res => { console.log(res) })
+  </script>
+
+
+  <!-- allSettled -->
+  <script>
+    // Promise.allSettled()
+    function myPromiseAllSettled(array) {
+      return new Promise((resolve, reject) => {
+        let result = []
+        array.forEach((item, index) => {
+          if (item instanceof Promise) {
+            item.then(res => {
+              result[index] = { status: 'fulfilled', value: res }
+              if (result.length === array.length) resolve(result)
+            }, err => {
+              result[index] = { status: 'rejected', reason: err }
+              if (result.length === array.length) resolve(result)
+            })
+          } else {
+            result[index] = { status: 'fulfilled', value: item }
+            if (result.length === array.length) resolve(result)
+          }
+        })
+      })
+    }
+
+    let p1 = new Promise((resolve, reject) => { resolve('p1') })
+    let p2 = Promise.resolve('p2')
+    let p3 = Promise.resolve('p3')
+    let p4 = 4
+    let p5 = 5
+    let p6 = 6
+    let arr = [p1, p5, p3]
+    myPromiseAllSettled(arr).then(res => { console.log(res); })
+  </script>
+</body>
+
+</html>
