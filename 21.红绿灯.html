@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // callback实现
+    const task = (timer, light, callback) => {
+      setTimeout(() => {
+        if (light === 'red') {
+          red()
+        }
+        else if (light === 'green') {
+          green()
+        }
+        else if (light === 'yellow') {
+          yellow()
+        }
+        callback()
+      }, timer)
+    }
+    task(3000, 'red', () => {
+      task(2000, 'green', () => {
+        task(1000, 'yellow', Function.prototype)
+      })
+    })
+  </script>
+</body>
+
+</html>
